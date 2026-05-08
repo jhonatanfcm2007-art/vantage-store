@@ -45,7 +45,7 @@ const faqs = [
 
 // ─── COMPONENTS ──────────────────────────────────────────────────────────────
 
-function Navbar({ scrolled }: { scrolled: boolean }) {
+function Navbar({ scrolled, onBuy }: { scrolled: boolean; onBuy: () => void }) {
   const [menu, setMenu] = useState(false);
   return (
     <>
@@ -74,9 +74,9 @@ function Navbar({ scrolled }: { scrolled: boolean }) {
 
           {/* Desktop CTA */}
           <div className="nav-links" style={{ display: 'flex' }}>
-            <a href="#comprar" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: T.gold, border: `1px solid rgba(201,168,76,0.4)`, padding: '0.6rem 1.5rem', textDecoration: 'none', transition: 'all 0.3s' }}
+            <button onClick={onBuy} style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: T.gold, border: `1px solid rgba(201,168,76,0.4)`, padding: '0.6rem 1.5rem', textDecoration: 'none', transition: 'all 0.3s', background: 'transparent', cursor: 'pointer' }}
               onMouseEnter={e => { e.currentTarget.style.background = T.gold; e.currentTarget.style.color = '#000'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = T.gold; }}>Comprar</a>
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = T.gold; }}>Comprar</button>
           </div>
 
           {/* Hamburger - mobile only */}
@@ -97,10 +97,10 @@ function Navbar({ scrolled }: { scrolled: boolean }) {
                 {item}
               </a>
             ))}
-            <a href="#comprar" onClick={() => setMenu(false)}
-              style={{ marginTop: '1rem', background: T.gold, color: '#000', padding: '1rem', textAlign: 'center', textDecoration: 'none', fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 600 }}>
+            <button onClick={() => { setMenu(false); onBuy(); }}
+              style={{ marginTop: '1rem', background: T.gold, color: '#000', padding: '1rem', textAlign: 'center', textDecoration: 'none', fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
               Comprar Ahora
-            </a>
+            </button>
           </div>
         )}
       </header>
@@ -454,7 +454,7 @@ export default function Page() {
 
   return (
     <div style={{ background: T.black, minHeight: '100vh' }}>
-      <Navbar scrolled={scrolled} />
+      <Navbar scrolled={scrolled} onBuy={() => setIsFormOpen(true)} />
       <Hero product={product} onBuy={() => setIsFormOpen(true)} />
       <MarqueeBar />
       <Features />
