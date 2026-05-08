@@ -24,34 +24,26 @@ export default function OrderForm({ isOpen, onClose, product }: OrderFormProps) 
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
-    try {
-      // Aquí llamaremos a nuestra API de Next.js que se conecta con Shopify Admin
-      const response = await fetch('/api/order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          productId: product?.id,
-          variantId: product?.variants.edges[0]?.node.id,
-          price: product?.variants.edges[0]?.node.price.amount || '99000',
-        }),
-      });
+    const phoneNumber = '573213434397';
+    const message = `*NUEVO PEDIDO VANTAGE - CONTRA ENTREGA*%0A%0A` +
+      `*Cliente:* ${formData.firstName} ${formData.lastName}%0A` +
+      `*Teléfono:* ${formData.phone}%0A` +
+      `*Dirección:* ${formData.address}%0A` +
+      `*Ciudad:* ${formData.city} - ${formData.department}%0A%0A` +
+      `*Producto:* ${product?.title || 'Reloj VANTAGE'}%0A` +
+      `*Total:* ${formatPrice(product?.variants?.edges?.[0]?.node?.price?.amount || '990000')}`;
 
-      if (response.ok) {
-        setSuccess(true);
-      } else {
-        alert('Hubo un error al procesar el pedido. Por favor intenta de nuevo.');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error de conexión.');
-    } finally {
-      setLoading(false);
-    }
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    
+    // Abrir WhatsApp en una nueva pestaña
+    window.open(whatsappUrl, '_blank');
+    
+    setSuccess(true);
+    setLoading(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
