@@ -388,7 +388,9 @@ function FAQ() {
   );
 }
 
-function CTABanner() {
+function CTABanner({ product }: { product?: ShopifyProduct }) {
+  const priceAmount = product?.priceRange.minVariantPrice.amount || '99000';
+  const displayPrice = formatPrice(priceAmount, 'COP');
   return (
     <section style={{
       background: `linear-gradient(135deg, #0C0C0C 0%, #141414 50%, #0C0C0C 100%)`,
@@ -463,7 +465,7 @@ export default function Page() {
       <Features />
       <Reviews />
       <FAQ />
-      <CTABanner />
+      <CTABanner product={product} />
       <Footer />
     </div>
   );
