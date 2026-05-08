@@ -114,7 +114,7 @@ function Hero({ product }: { product?: ShopifyProduct }) {
   const [selectedVariant, setSelectedVariant] = useState(variants[0]);
   const [loading, setLoading] = useState(false);
 
-  const priceAmount = selectedVariant?.price.amount || product?.priceRange.minVariantPrice.amount || '289000';
+  const priceAmount = selectedVariant?.price.amount || product?.priceRange.minVariantPrice.amount || '99000';
   const priceCurrency = selectedVariant?.price.currencyCode || 'COP';
   const displayPrice = formatPrice(priceAmount, priceCurrency);
   const heroImage = images[0]?.url;
@@ -185,7 +185,7 @@ function Hero({ product }: { product?: ShopifyProduct }) {
         {/* Price */}
         <div className="anim-fade-up d3" style={{ marginBottom: '2.5rem' }}>
           <span style={{ fontFamily: T.serif, fontSize: '2.8rem', color: T.text, letterSpacing: '-0.02em' }}>
-            $289.000
+            {displayPrice}
           </span>
           <span style={{ fontSize: '0.7rem', color: T.muted, marginLeft: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
             COP · Envío Gratis
@@ -413,7 +413,7 @@ function CTABanner() {
         onMouseEnter={e => { e.currentTarget.style.backgroundPosition = 'right center'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
         onMouseLeave={e => { e.currentTarget.style.backgroundPosition = 'left center'; e.currentTarget.style.transform = 'translateY(0)'; }}
       >
-        Comprar Ahora — $289.000 COP
+        Comprar Ahora — {displayPrice}
       </button>
     </section>
   );
