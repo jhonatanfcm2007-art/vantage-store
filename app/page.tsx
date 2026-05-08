@@ -11,12 +11,12 @@ const T = {
   darkA: '#0A0A0A',
   darkB: '#111111',
   darkC: '#181818',
-  border: 'rgba(255,255,255,0.07)',
-  gold: '#C9A84C',
-  goldLight: '#E8C97A',
-  ice: '#8FB8CC',
-  text: '#E8E8E8',
-  muted: '#707070',
+  border: 'rgba(255,255,255,0.1)',
+  gold: '#D4AF37', // Un tono oro más vibrante
+  goldLight: '#F3E5AB',
+  ice: '#B0D4E3',
+  text: '#FFFFFF',
+  muted: '#A0A0A0',
   serif: "'Cormorant Garamond', Georgia, serif",
   sans: "'Inter', -apple-system, sans-serif",
 };
