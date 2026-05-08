@@ -24,26 +24,34 @@ export default function OrderForm({ isOpen, onClose, product }: OrderFormProps) 
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
-    const phoneNumber = '573213434397';
-    const message = `*NUEVO PEDIDO VANTAGE - CONTRA ENTREGA*%0A%0A` +
-      `*Cliente:* ${formData.firstName} ${formData.lastName}%0A` +
-      `*Teléfono:* ${formData.phone}%0A` +
-      `*Dirección:* ${formData.address}%0A` +
-      `*Ciudad:* ${formData.city} - ${formData.department}%0A%0A` +
-      `*Producto:* ${product?.title || 'Reloj VANTAGE'}%0A` +
-      `*Total:* ${formatPrice(product?.variants?.edges?.[0]?.node?.price?.amount || '990000')}`;
+    try {
+      const response = await fetch('https://formspree.io/f/mnjwbwng', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          producto: product?.title || 'Reloj VANTAGE',
+          precio: formatPrice(product?.variants?.edges?.[0]?.node?.price?.amount || '990000'),
+          variantId: product?.variants?.edges?.[0]?.node?.id,
+          tipo: 'PEDIDO CONTRA ENTREGA'
+        }),
+      });
 
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    
-    // Abrir WhatsApp en una nueva pestaña
-    window.open(whatsappUrl, '_blank');
-    
-    setSuccess(true);
-    setLoading(false);
+      if (response.ok) {
+        setSuccess(true);
+      } else {
+        alert('Hubo un error al enviar el pedido. Por favor intenta de nuevo.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error de conexión. Revisa tu internet.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
