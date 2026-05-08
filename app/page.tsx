@@ -109,7 +109,7 @@ function Navbar({ scrolled }: { scrolled: boolean }) {
   );
 }
 
-function Hero({ product }: { product?: ShopifyProduct }) {
+function Hero({ product, onBuy }: { product?: ShopifyProduct; onBuy: () => void }) {
   const images = product?.images.edges.map(({ node }) => node) || [];
   const variants = product?.variants.edges.map(({ node }) => node) || [];
   const [selectedVariant, setSelectedVariant] = useState(variants[0]);
@@ -122,8 +122,7 @@ function Hero({ product }: { product?: ShopifyProduct }) {
   const productTitle = product?.title || 'Rolex President Arabé Blue';
 
   const handleBuy = async () => {
-    // Abrimos el formulario de contra entrega en lugar de ir a Shopify
-    (window as any).openOrderForm();
+    onBuy();
   };
   return (
     <section id="hero-section" style={{
@@ -190,7 +189,7 @@ function Hero({ product }: { product?: ShopifyProduct }) {
         {/* CTA Buttons */}
         <div id="comprar" className="anim-fade-up d3 cta-row" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <button
-            onClick={() => (window as any).openOrderForm()}
+            onClick={onBuy}
             style={{
               background: T.text, color: T.black, border: 'none',
               padding: '1rem 2.5rem', fontSize: '0.65rem', letterSpacing: '0.25em',
@@ -383,7 +382,7 @@ function FAQ() {
   );
 }
 
-function CTABanner({ product }: { product?: ShopifyProduct }) {
+function CTABanner({ product, onBuy }: { product?: ShopifyProduct; onBuy: () => void }) {
   const priceAmount = product?.priceRange.minVariantPrice.amount || '99000';
   const displayPrice = formatPrice(priceAmount, 'COP');
   return (
@@ -399,7 +398,7 @@ function CTABanner({ product }: { product?: ShopifyProduct }) {
         Únete a los más de 300 hombres que ya llevan VANTAGE en su muñeca. Envío gratis en todo Colombia.
       </p>
       <button
-        onClick={() => (window as any).openOrderForm()}
+        onClick={onBuy}
         style={{
           background: `linear-gradient(135deg, ${T.gold}, ${T.goldLight}, ${T.gold})`,
           backgroundSize: '200% auto',
@@ -445,7 +444,6 @@ export default function Page() {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
-    (window as any).openOrderForm = () => setIsFormOpen(true);
     const fn = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', fn, { passive: true });
     getAllProducts().then(products => {
@@ -457,12 +455,12 @@ export default function Page() {
   return (
     <div style={{ background: T.black, minHeight: '100vh' }}>
       <Navbar scrolled={scrolled} />
-      <Hero product={product} />
+      <Hero product={product} onBuy={() => setIsFormOpen(true)} />
       <MarqueeBar />
       <Features />
       <Reviews />
       <FAQ />
-      <CTABanner product={product} />
+      <CTABanner product={product} onBuy={() => setIsFormOpen(true)} />
       <Footer />
 
       <OrderForm 
