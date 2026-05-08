@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ShopifyProduct, getAllProducts, createCart, formatPrice } from '@/lib/shopify';
+import OrderForm from '@/components/OrderForm';
 
 // ─── DESIGN TOKENS ────────────────────────────────────────────────────────────
 const T = {
@@ -121,14 +122,8 @@ function Hero({ product }: { product?: ShopifyProduct }) {
   const productTitle = product?.title || 'Rolex President Arabé Blue';
 
   const handleBuy = async () => {
-    const variantId = selectedVariant?.id || variants[0]?.id;
-    if (!variantId) { window.open('https://i3gupz-vq.myshopify.com', '_blank'); return; }
-    setLoading(true);
-    try {
-      const cart = await createCart(variantId, 1);
-      window.location.href = cart.checkoutUrl;
-    } catch { window.open('https://i3gupz-vq.myshopify.com', '_blank'); }
-    finally { setLoading(false); }
+    // Abrimos el formulario de contra entrega en lugar de ir a Shopify
+    (window as any).openOrderForm();
   };
   return (
     <section id="hero-section" style={{
@@ -195,7 +190,7 @@ function Hero({ product }: { product?: ShopifyProduct }) {
         {/* CTA Buttons */}
         <div id="comprar" className="anim-fade-up d3 cta-row" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <button
-            onClick={() => window.open('https://i3gupz-vq.myshopify.com', '_blank')}
+            onClick={() => (window as any).openOrderForm()}
             style={{
               background: T.text, color: T.black, border: 'none',
               padding: '1rem 2.5rem', fontSize: '0.65rem', letterSpacing: '0.25em',
@@ -404,7 +399,7 @@ function CTABanner({ product }: { product?: ShopifyProduct }) {
         Únete a los más de 300 hombres que ya llevan VANTAGE en su muñeca. Envío gratis en todo Colombia.
       </p>
       <button
-        onClick={() => window.open('https://i3gupz-vq.myshopify.com', '_blank')}
+        onClick={() => (window as any).openOrderForm()}
         style={{
           background: `linear-gradient(135deg, ${T.gold}, ${T.goldLight}, ${T.gold})`,
           backgroundSize: '200% auto',
@@ -446,9 +441,10 @@ function Footer() {
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 export default function Page() {
   const [scrolled, setScrolled] = useState(false);
-  const [product, setProduct] = useState<ShopifyProduct | undefined>(undefined);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
+    (window as any).openOrderForm = () => setIsFormOpen(true);
     const fn = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', fn, { passive: true });
     getAllProducts().then(products => {
@@ -467,6 +463,12 @@ export default function Page() {
       <FAQ />
       <CTABanner product={product} />
       <Footer />
+
+      <OrderForm 
+        isOpen={isFormOpen} 
+        onClose={() => setIsFormOpen(false)} 
+        product={product}
+      />
     </div>
   );
 }
