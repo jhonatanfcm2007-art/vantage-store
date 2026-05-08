@@ -59,110 +59,89 @@ export default function OrderForm({ isOpen, onClose, product }: OrderFormProps) 
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="relative w-full max-w-lg bg-[#0A0A0A] border border-white/10 p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(4px)' }}>
+      <div style={{ position: 'relative', width: '100%', maxWidth: '32rem', background: '#0A0A0A', border: '1px solid rgba(255,255,255,0.1)', padding: '2rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)', overflowY: 'auto', maxHeight: '90vh' }}>
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors"
+          style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer' }}
+          onMouseEnter={e => e.currentTarget.style.color = '#FFF'}
+          onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
         >
           <X size={24} />
         </button>
 
         {success ? (
-          <div className="text-center py-12 animate-in zoom-in duration-500">
-            <CheckCircle2 className="mx-auto text-[#C9A84C] mb-6" size={64} />
-            <h2 className="brand-serif text-3xl text-white mb-4">¡Pedido Recibido!</h2>
-            <p className="text-white/60 mb-8">Gracias por confiar en VANTAGE. Nos pondremos en contacto contigo pronto para confirmar la entrega.</p>
+          <div style={{ textAlign: 'center', padding: '3rem 0' }}>
+            <CheckCircle2 size={64} style={{ color: '#C9A84C', margin: '0 auto 1.5rem' }} />
+            <h2 className="brand-serif" style={{ fontSize: '1.875rem', color: '#FFF', marginBottom: '1rem' }}>¡Pedido Recibido!</h2>
+            <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '2rem' }}>Gracias por confiar en VANTAGE. Nos pondremos en contacto contigo pronto para confirmar la entrega.</p>
             <button 
               onClick={onClose}
-              className="w-full py-4 bg-white text-black text-[11px] tracking-[0.25em] uppercase font-bold hover:bg-[#C9A84C] transition-colors"
+              style={{ width: '100%', padding: '1rem', background: '#FFF', color: '#000', fontSize: '11px', letterSpacing: '0.25em', textTransform: 'uppercase', fontWeight: 'bold', border: 'none', cursor: 'pointer', transition: 'background 0.3s' }}
+              onMouseEnter={e => e.currentTarget.style.background = '#C9A84C'}
+              onMouseLeave={e => e.currentTarget.style.background = '#FFF'}
             >
               Cerrar
             </button>
           </div>
         ) : (
           <>
-            <div className="mb-8">
-              <p className="text-[10px] tracking-[0.3em] uppercase text-[#8FB8CC] mb-2">Checkout Contra Entrega</p>
-              <h2 className="brand-serif text-3xl text-white">Finalizar Pedido</h2>
-              <div className="mt-4 p-4 bg-white/5 border border-white/5 flex justify-between items-center">
-                <span className="text-white/60 text-sm">{product?.title || 'Reloj VANTAGE'}</span>
-                <span className="text-white font-medium">{formatPrice(product?.variants.edges[0]?.node.price.amount || '99000')}</span>
+            <div style={{ marginBottom: '2rem' }}>
+              <p style={{ fontSize: '10px', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#8FB8CC', marginBottom: '0.5rem' }}>Checkout Contra Entrega</p>
+              <h2 className="brand-serif" style={{ fontSize: '1.875rem', color: '#FFF' }}>Finalizar Pedido</h2>
+              <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.875rem' }}>{product?.title || 'Reloj VANTAGE'}</span>
+                <span style={{ color: '#FFF', fontWeight: 500 }}>{formatPrice(product?.variants?.edges?.[0]?.node?.price?.amount || '99000')}</span>
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-[10px] tracking-widest uppercase text-white/40">Nombre</label>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+                  <label style={{ fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>Nombre</label>
                   <input 
-                    required
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    placeholder="Ej: Juan"
-                    className="w-full bg-white/5 border border-white/10 px-4 py-3 text-white text-sm focus:border-[#C9A84C] outline-none transition-colors"
+                    required name="firstName" value={formData.firstName} onChange={handleChange} placeholder="Ej: Juan"
+                    style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.75rem 1rem', color: '#FFF', fontSize: '0.875rem', outline: 'none' }}
                   />
                 </div>
-                <div className="space-y-1.5">
-                  <label className="text-[10px] tracking-widest uppercase text-white/40">Apellido</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+                  <label style={{ fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>Apellido</label>
                   <input 
-                    required
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    placeholder="Ej: Pérez"
-                    className="w-full bg-white/5 border border-white/10 px-4 py-3 text-white text-sm focus:border-[#C9A84C] outline-none transition-colors"
+                    required name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Ej: Pérez"
+                    style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.75rem 1rem', color: '#FFF', fontSize: '0.875rem', outline: 'none' }}
                   />
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[10px] tracking-widest uppercase text-white/40">Teléfono / WhatsApp</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+                <label style={{ fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>Teléfono / WhatsApp</label>
                 <input 
-                  required
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="300 123 4567"
-                  className="w-full bg-white/5 border border-white/10 px-4 py-3 text-white text-sm focus:border-[#C9A84C] outline-none transition-colors"
+                  required type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="300 123 4567"
+                  style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.75rem 1rem', color: '#FFF', fontSize: '0.875rem', outline: 'none' }}
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[10px] tracking-widest uppercase text-white/40">Dirección Completa</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+                <label style={{ fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>Dirección Completa</label>
                 <input 
-                  required
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  placeholder="Calle 123 #45-67, Apto 101"
-                  className="w-full bg-white/5 border border-white/10 px-4 py-3 text-white text-sm focus:border-[#C9A84C] outline-none transition-colors"
+                  required name="address" value={formData.address} onChange={handleChange} placeholder="Calle 123 #45-67, Apto 101"
+                  style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.75rem 1rem', color: '#FFF', fontSize: '0.875rem', outline: 'none' }}
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-[10px] tracking-widest uppercase text-white/40">Ciudad</label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+                  <label style={{ fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>Ciudad</label>
                   <input 
-                    required
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    placeholder="Ej: Bogotá"
-                    className="w-full bg-white/5 border border-white/10 px-4 py-3 text-white text-sm focus:border-[#C9A84C] outline-none transition-colors"
+                    required name="city" value={formData.city} onChange={handleChange} placeholder="Ej: Bogotá"
+                    style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.75rem 1rem', color: '#FFF', fontSize: '0.875rem', outline: 'none' }}
                   />
                 </div>
-                <div className="space-y-1.5">
-                  <label className="text-[10px] tracking-widest uppercase text-white/40">Departamento</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+                  <label style={{ fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>Departamento</label>
                   <input 
-                    required
-                    name="department"
-                    value={formData.department}
-                    onChange={handleChange}
-                    placeholder="Ej: Cundinamarca"
-                    className="w-full bg-white/5 border border-white/10 px-4 py-3 text-white text-sm focus:border-[#C9A84C] outline-none transition-colors"
+                    required name="department" value={formData.department} onChange={handleChange} placeholder="Ej: Cundinamarca"
+                    style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.75rem 1rem', color: '#FFF', fontSize: '0.875rem', outline: 'none' }}
                   />
                 </div>
               </div>
@@ -170,11 +149,13 @@ export default function OrderForm({ isOpen, onClose, product }: OrderFormProps) 
               <button 
                 type="submit"
                 disabled={loading}
-                className="w-full mt-6 py-4 bg-[#C9A84C] text-black text-[11px] tracking-[0.25em] uppercase font-bold hover:bg-[#E8C97A] transition-all flex items-center justify-center gap-2"
+                style={{ width: '100%', marginTop: '1.5rem', padding: '1rem', background: '#C9A84C', color: '#000', fontSize: '11px', letterSpacing: '0.25em', textTransform: 'uppercase', fontWeight: 'bold', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', transition: 'background 0.3s' }}
+                onMouseEnter={e => e.currentTarget.style.background = '#E8C97A'}
+                onMouseLeave={e => e.currentTarget.style.background = '#C9A84C'}
               >
                 {loading ? (
                   <>
-                    <Loader2 className="animate-spin" size={16} />
+                    <Loader2 size={16} /> {/* Replace animation with simple icon for now to avoid external dependencies */}
                     Procesando...
                   </>
                 ) : (
@@ -182,7 +163,7 @@ export default function OrderForm({ isOpen, onClose, product }: OrderFormProps) 
                 )}
               </button>
               
-              <p className="text-[9px] text-center text-white/30 tracking-widest uppercase mt-4">
+              <p style={{ fontSize: '9px', textAlign: 'center', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '1rem' }}>
                 Pagos 100% seguros · Envío gratis incluido
               </p>
             </form>
