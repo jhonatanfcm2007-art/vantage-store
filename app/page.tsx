@@ -441,6 +441,7 @@ function Footer() {
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 export default function Page() {
   const [scrolled, setScrolled] = useState(false);
+  const [product, setProduct] = useState<ShopifyProduct | undefined>(undefined);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
